@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Game Of Three</title>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div id="app"></div>
+        <button id="send">Send</button>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://localhost:3000');
+            socket.on('message', function (data) {
+                 var { message } =  data
+                 $('#app').append(`<p>${message}</p>`)
+            });
+            
+            socket.on('action', function (data) {
+                var { number } = data
+                socket.emit('play',{number})
+            });
+          document.querySelector('#send').onclick= ()=>{
+              $('app').append(`you started with number 12`)
+              socket.emit('gameStart',{number:56})
+          }
+        </script>
+    </body>
+</html>
