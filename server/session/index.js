@@ -55,9 +55,13 @@ class Session {
     return this.player1
  }
 
- get canPlay(){
+ get canJoin(){
      /** chech if the session has 2 player  */
-     return this.player1 != null && this.player2 != null
+     return this.player1 == null || this.player2 == null
+ }
+
+ get isRunning(){
+     return !this.game.isOver  && !this.canJoin
  }
 }
 
