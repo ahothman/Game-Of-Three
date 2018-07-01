@@ -1,3 +1,5 @@
+var { getMessage } = require('../game/utils.js')
+
 module.exports = [
     {
         eventName:'gameStart',
@@ -11,17 +13,20 @@ module.exports = [
              socket.to(otherPlayer.socketId).emit('message',{message:`the game is started with ${number}`})
              
              otherPlayer.play(number)
-             socket.emit('message',{message:game.getCurrentAction()})
-             socket.to(otherPlayer.socketId).emit('message',{message:game.getCurrentAction()})
+             var currentAction= game.getCurrentAction()
+             socket.emit('message',getMessage(socket.id,currentAction))
+             socket.to(otherPlayer.socketId).emit('message',getMessage(otherPlayer.socketId,currentAction))
+             
              if(!game.isOver){
-                 var nextNumber = session.getNextNumber()
+                 var nextNumber = game.getNextNumber()
                  socket.emit('action', {number:nextNumber})
              }
      
              game.on('win',(player)=>{
-                 socket.emit('message',{message:game.getCurrentAction()})
-                 socket.to(otherPlayer.socketId).emit('message',{message:game.getCurrentAction()})
-                 
+                 var currentAction= game.getCurrentAction()
+                 socket.emit('message',getMessage(socket.id,currentAction))
+                 socket.to(otherPlayer.socketId).emit('message',getMessage(otherPlayer.socketId,currentAction))
+
                   if(socket.id == player.socketId){
                      socket.emit('message',{message:'you won!!!'})
                      socket.to(otherPlayer.socketId).emit('message',{message:'sorry, you lost!!!'})
@@ -30,6 +35,8 @@ module.exports = [
                      socket.emit('message',{message:'sorry, you lost!!!'})
                      socket.to(otherPlayer.socketId).emit('message',{message:'you won!!!'})
                   }
+                  this.io.emit('canStart',{canStart:false})
+                  session.clear()
              })
       }
     },
@@ -45,17 +52,31 @@ module.exports = [
         currentPlayer.play(number)
        
         if(!game.isOver){
-           var nextNumber = session.getNextNumber()
-           socket.emit('message',{message:game.getCurrentAction()})
-           socket.to(otherPlayer.socketId).emit('message',{message:game.getCurrentAction()})
+           var nextNumber = game.getNextNumber()
+           var currentAction= game.getCurrentAction()
+           socket.emit('message',getMessage(socket.id,currentAction))
+           socket.to(otherPlayer.socketId).emit('message',getMessage(otherPlayer.socketId,currentAction))
            socket.to(otherPlayer.socketId).emit('action', {number:nextNumber})
         }
     }
 },
 {
     eventName:'disconnect',
-    handler:function(socket,message){
-       console.log('disconnect',socket.id)
-    }
-}
-]
+    handler:function(socket){
+     var { session } = this,
+         currentPlayer = session.getCurrentPlayer(socket.id),
+         otherPlayer = session.getOtherPlayer(socket.id)
+
+       if( currentPlayer != null && currentPlayer.isMaster){ 
+           session.clear()
+           if(otherPlayer!=null)
+              socket.to(otherPlayer.socketId).emit('clearSession')
+       }
+      else {
+          if(otherPlayer != null){
+              session.deletePlayer(socket.id)
+              socket.to(otherPlayer.socketId).emit('canStart',{canStart:false})
+          }
+      }
+    }  
+}]

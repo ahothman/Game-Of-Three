@@ -2,10 +2,11 @@ var  GameAction  = require('./gameAction.js')
 var { actions } = require('./constants.js')
 
 class Player {
-    constructor(name,socketId,game){
+    constructor(name,socketId,game,isMaster){
         this.name =  name
         this.socketId = socketId
         this.game = game
+        this.isMaster = isMaster
     }
 
     play(currentNumber){

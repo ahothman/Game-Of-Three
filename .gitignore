@@ -5,3 +5,7 @@
 #ignore vscode
 
 .vscode
+
+#ignore build
+
+build

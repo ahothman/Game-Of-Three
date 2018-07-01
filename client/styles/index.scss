@@ -1,0 +1,85 @@
+body {
+ background-color: #fafafa;
+}
+a {
+    color: inherit;
+    outline: none;
+    text-decoration: none;
+}
+
+.btn {
+    background-color: #68c39f;
+    color: #fff;
+    padding: 7px;
+    outline: none;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:disabled {
+ background-color: #cdcdcd;
+}
+
+.custom-input {
+    padding: 7px;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 8px #eee;
+    outline: none;  
+}
+
+.game {
+    display: flex;
+    height: 100%;
+    .primary,.secondary {
+        padding: 20px;
+    }
+    .primary {
+        width: 25%;
+        border-right: 1px solid #eee;
+
+        .p-name{
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    }
+
+    .secondary {
+        width: 70%;
+        background-color: #fefdfd;
+    }
+    .header {
+        width: 200px;
+        margin-left: 30%;
+        margin-bottom: 50px;
+    }
+}
+
+.game-controller {
+    padding: 10px;
+
+    .control{
+        margin-bottom: 20px;
+        .btn ,.custom-input {
+            width: 100%;
+        }
+    }
+
+    .error{
+        color:red;
+        font-size: 0.8em;
+    }
+
+}
+
+.info {
+
+    h3{
+        margin-bottom: 50px;
+    }
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 100px;
+    text-align: center
+}
