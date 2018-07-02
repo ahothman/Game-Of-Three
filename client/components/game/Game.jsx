@@ -11,6 +11,7 @@ class Game extends Component {
            player:null,
            canStart:false,
            requireRefresh:false,
+           isOver:false,
            messages: []
        }
        this.start = this.start.bind(this)
@@ -50,6 +51,12 @@ class Game extends Component {
                 requireRefresh:true
            })
        })
+
+       socket.on('gameOver',()=>{
+           this.setState({
+               isOver:true
+           })
+       })
    }
 
 
@@ -68,7 +75,7 @@ class Game extends Component {
    }
 
    render(){
-      var { messages,player,canStart,requireRefresh } = this.state
+      var { messages, player, canStart, requireRefresh, isOver } = this.state
 
       if(player == null) {
           return null
@@ -77,11 +84,21 @@ class Game extends Component {
          return <Refresh/>
       }
       
-      var controller = this.getGameController()
+      var controller 
+
+      if(isOver){
+          controller = <p className="text-center">Game is over, please refresh to start a new session </p>
+      }
+
+      else{
+           controller = this.getGameController()
+      }
+     
+      
 
       return <div className="game">
                 <div className="primary">
-                   <h4 className="p-name">{player.name}</h4>
+                   <h4 className="p-name">{`you are ${player.name}`}</h4>
                    {controller}
                 </div>
                 <div className="secondary">

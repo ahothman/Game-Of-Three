@@ -8,21 +8,8 @@ module.exports = [
                  { number } = message ,
                  { game } = session,
                  otherPlayer = session.getOtherPlayer(socket.id)
-     
-             socket.emit('message',{message:`the game is started with ${number}`})
-             socket.to(otherPlayer.socketId).emit('message',{message:`the game is started with ${number}`})
-             
-             otherPlayer.play(number)
-             var currentAction= game.getCurrentAction()
-             socket.emit('message',getMessage(socket.id,currentAction))
-             socket.to(otherPlayer.socketId).emit('message',getMessage(otherPlayer.socketId,currentAction))
-             
-             if(!game.isOver){
-                 var nextNumber = game.getNextNumber()
-                 socket.emit('action', {number:nextNumber})
-             }
-     
-             game.on('win',(player)=>{
+
+               game.on('win',(player)=>{
                  var currentAction= game.getCurrentAction()
                  socket.emit('message',getMessage(socket.id,currentAction))
                  socket.to(otherPlayer.socketId).emit('message',getMessage(otherPlayer.socketId,currentAction))
@@ -35,9 +22,25 @@ module.exports = [
                      socket.emit('message',{message:'sorry, you lost!!!'})
                      socket.to(otherPlayer.socketId).emit('message',{message:'you won!!!'})
                   }
-                  this.io.emit('canStart',{canStart:false})
+                  this.io.emit('gameOver')
                   session.clear()
              })
+     
+             socket.emit('message',{message:`the game is started with ${number}`})
+             socket.to(otherPlayer.socketId).emit('message',{message:`the game is started with ${number}`})
+             
+             otherPlayer.play(number)
+             var currentAction= game.getCurrentAction()
+             
+             
+             if(!game.isOver){
+                 var nextNumber = game.getNextNumber()
+                 socket.emit('action', {number:nextNumber})
+                 socket.emit('message',getMessage(socket.id,currentAction))
+                 socket.to(otherPlayer.socketId).emit('message',getMessage(otherPlayer.socketId,currentAction))
+             }
+     
+           
       }
     },
     {

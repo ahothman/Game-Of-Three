@@ -31,14 +31,6 @@ class GameController extends Component {
             })
         }
    }
- 
-
-   componentWillUnmount(){
-       alert('hacona')
-       var { socket } = this
-       console.log('unmount')
-       socket.emit('leave')
-   }
   
    generateRandomNumber(){
         var number = Math.floor(Math.random() * 1000 ) + 2
@@ -89,7 +81,7 @@ class GameController extends Component {
    }
 
    render(){
-      var { startNumber, canStart, selectManually,error } = this.state
+      var { startNumber, canStart, selectManually, error } = this.state
 
       return   <div className="game-controller">
                         <div className="control">

@@ -9,7 +9,7 @@ class Session {
 
   }
 
-  _isValidScoket(socketId){
+  _isValidSocket(socketId){
       if(this.player1 != null && this.player1.socketId == socketId) 
           return true
       if(this.player2 != null && this.player2.socketId == socketId)
@@ -19,10 +19,10 @@ class Session {
 
   addPlayer(socketId){
         if(this.player1 == null){
-            this.player1 = new Player('player_1',socketId,this.game,true)
+            this.player1 = new Player('player 1',socketId,this.game,true)
         }
         else if(this.player2 == null){
-            this.player2  = new Player('player_2',socketId,this.game,false)
+            this.player2  = new Player('player 2',socketId,this.game,false)
         }
   }
 
@@ -43,7 +43,7 @@ class Session {
 
  getCurrentPlayer(socketId){
 
-    if(!this._isValidScoket(socketId)) {
+    if(!this._isValidSocket(socketId)) {
       return null
     }
 
@@ -55,7 +55,7 @@ class Session {
  }
 
  getOtherPlayer(socketId){
-    if(!this._isValidScoket(socketId)) {
+    if(!this._isValidSocket(socketId)) {
        return null
     }
 
@@ -67,7 +67,7 @@ class Session {
  }
 
  getMasterPlayer(){
-    if(!this._isValidScoket(socketId)) {
+    if(!this._isValidSocket(socketId)) {
         return null
      }
     if(this.player1.isMaster){
